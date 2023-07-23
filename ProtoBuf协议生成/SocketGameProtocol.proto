@@ -1,0 +1,89 @@
+syntax = "proto3";
+package SocketGameProtocol;
+enum RequestCode
+{
+    RequestNone=0;
+    Uesr=1;
+    Room=2;
+    Game=3;
+}
+enum ActionCode
+{
+	ActionNone=0;//None必须不同名
+    Logon=1;//注册
+    Login=2;//登录
+    CreateRoom=3;
+    FindRoom=4;//
+    PlayerList=5;//房间内玩家列表
+    JoinRoom=6;//加入房间
+    Exit=7;
+    Chat=8;//聊天行为
+    StartGame=9;//开始游戏
+    Starting=10;//客户端发来的真正的游戏开始指令
+    //状态同步：
+    UpState=11;
+    ExitGame=12;
+    UpdatePlayer=13;//更新游戏中的玩家列表
+    Fire=14;
+}
+enum ReturnCode
+{
+	ReturnNone=0;
+    Succeed=1;
+    Filled=2;
+    NotRoom=3;
+}
+
+message MainPack{
+   RequestCode requestCode=1;
+   ActionCode actionCode=2;
+   ReturnCode returnCode=3;
+   LoginPack LoginPack=4;
+   string str=5;//保证消息包发送出去
+   repeated RoomPack roompack=6;// repeated=定义数组
+   repeated PlayerPack playerpack=7;
+   BulletPack BulletPack=8;
+   string user=9;
+
+}
+message LoginPack{
+    string username=1;
+    string password=2;
+}
+message RoomPack{ 
+    //房间名
+    string roomname=1;
+    //房间最大数量
+    int32 maxnum=2; 
+    //当前数量
+    int32 currentnum=3;
+    //状态
+    int32 state=4;
+}
+message PlayerPack{
+    //玩家名称
+    string playername=1;
+    //玩家ID
+    string playerID=2;
+    //玩家血量
+    int32 hp=3;
+    //位置信息包
+    PosPack pospack=4;
+}
+message PosPack{
+    //玩家位置
+    float PosX=1;
+    float PosY=2;       
+
+    float RotZ=3;       //玩家旋转信息
+    float GunRotZ=4;    //枪的旋转信息
+}
+message BulletPack{
+    float PosX=1;
+    float PosY=2;
+    
+    float MousePosX=3;
+    float MousePosY=4;
+    float RotZ=5;
+    
+}
